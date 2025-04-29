@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="robot_model_file" default="$(find voxblox_ros)/cfg/model/hummingbird.mesh"/> 
+  <arg name="mesh_file" default="$(find voxblox_ros)/output/voxfield.ply"/> 
+
+  <node name="voxblox_node" pkg="voxblox_ros" type="voxfield_server" output="screen" args="-alsologtostderr" clear_params="true">
+    <remap from="pointcloud" to="/wheel_robot_slam/pure_LIO/cloud_registered_body" />
+    <rosparam file="$(find voxblox_ros)/cfg/param/azure_kinect_param.yaml"/>
+    <rosparam file="$(find voxblox_ros)/cfg/calib/azure_kinect_calib.yaml"/>
+    <param name="robot_model_file" value="$(arg robot_model_file)"/>
+    <param name="mesh_filename" value="$(arg mesh_file)"/>
+
+    <!-- <param name="local_range_offset_x" value="5" />
+    <param name="local_range_offset_y" value="5" /> -->
+  </node>
+
+  <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find voxblox_ros)/cfg/rviz/azurekinect_10cm.rviz" />
+
+</launch>
